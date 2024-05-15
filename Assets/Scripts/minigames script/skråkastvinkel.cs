@@ -1,53 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;  // Needed for Scene Management
+using TMPro;  // Ensure TMPro is included if you're using Text Mesh Pro for popups
 
 public class RotateAndDisplayAngle : MonoBehaviour
 {
-    public Transform ball; // Reference til kuglen
-    public TMPro.TMP_Text angleText; // Reference til 3D tekstkomponenten
-    public float forceMagnitude = 1000f; // Styrken af affyringskraften
+    public Transform ball; // Reference to the ball
+    public TMPro.TMP_Text angleText; // Reference to the 3D text component
+    public float forceMagnitude = 1000f; // Strength of firing force
+    public GameObject popup; // Reference to the popup message object
 
-    private float rotationAngle = 45f; // Startvinkel for skråt kast
-    private Rigidbody ballRigidbody; // Rigidbody komponenten for kuglen
-    private bool canShoot = true; // Flag til at kontrollere affyring
+    private float rotationAngle = 45f; // Starting angle for the projectile
+    private Rigidbody ballRigidbody; // Rigidbody component for the ball
+    private bool canShoot = true; // Control flag for firing
+    private float launchTime; // Time at which the ball was fired
+    private bool isBallLaunched; // Check if the ball has been launched
 
     void Start()
     {
-        // Få reference til Rigidbody
         ballRigidbody = ball.GetComponent<Rigidbody>();
+        popup.SetActive(false); // Ensure the popup is disabled at start
     }
 
     void Update()
     {
-        // Ændr rotation baseret på piletasterne
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            rotationAngle += 5f; // Øg rotationsvinklen
-            if (rotationAngle > 90f) rotationAngle = 90f; // Begræns vinklen til 90 grader
+            rotationAngle += 5f;
+            if (rotationAngle > 90f) rotationAngle = 90f;
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            rotationAngle -= 5f; // Reducer rotationsvinklen
-            if (rotationAngle < 0f) rotationAngle = 0f; // Begræns vinklen til 0 grader
+            rotationAngle -= 5f;
+            if (rotationAngle < 0f) rotationAngle = 0f;
         }
 
-        // Opdater 3D tekst for at vise den aktuelle vinkel
-        angleText.text = "Vinkel: " + rotationAngle.ToString("F0") + "°";
+        angleText.text = "Angle: " + rotationAngle.ToString("F0") + "°";
 
-        // Affyr kuglen med mellemrumstasten
         if (Input.GetKeyDown(KeyCode.Space) && canShoot)
         {
             FireCannon();
+        }
+
+        if (isBallLaunched)
+        {
+            if (Time.time - launchTime > 4f && ball.position.z < 4.215)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reset scene
+            }
+            else if (ball.position.z >= 4.215)
+            {
+                popup.SetActive(true);
+                popup.GetComponent<TMP_Text>().text = "Du har mestret den perfekte vinkel. Sejren er din.";
+                isBallLaunched = false; // Stop checking after displaying the popup
+            }
         }
     }
 
     void FireCannon()
     {
-        // Beregn affyringsretning baseret på den aktuelle rotation
         Vector3 forceDirection = Quaternion.Euler(-rotationAngle, 0, 0) * Vector3.forward * forceMagnitude;
-        // Tilføj en impuls til kuglens Rigidbody
         ballRigidbody.AddForce(forceDirection, ForceMode.Impulse);
-        canShoot = false; // Forhindre gentagen affyring
+        canShoot = false;
+        launchTime = Time.time;
+        isBallLaunched = true;
     }
 }
