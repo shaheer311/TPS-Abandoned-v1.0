@@ -6,6 +6,8 @@ using UnityEngine.AI;
 public class Zombie1 : MonoBehaviour
 {
     [Header("Zombie Health and Damage")]
+    private float zombieHealth = 100f;
+    private float presentHealth;
     public float giveDamage = 5f;
 
 
@@ -37,6 +39,7 @@ public class Zombie1 : MonoBehaviour
 
     private void Awake()
     {
+        presentHealth = zombieHealth;
       zombieAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -117,5 +120,26 @@ public class Zombie1 : MonoBehaviour
     private void ActiveAttacking()
     {
         previouslyAttack = false;
-    } 
+    }
+    public void zombieHitDamage(float takeDamage)
+    {
+        presentHealth -= takeDamage;
+
+        if(presentHealth <= 0)
+        {
+            zombieDie();
+        }
+    }
+    private void zombieDie()
+    {
+        zombieAgent.SetDestination(transform.position);
+        zombieSpeed = 0f;
+        attackingRadius = 0f;
+        visionRadius = 0f;
+        playerInattackingRadius = false;
+        playerInvisionRadius = false;
+        Object.Destroy(gameObject, 5.0f);
+    }
+
+
 }
