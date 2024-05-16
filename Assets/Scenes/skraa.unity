@@ -2966,8 +2966,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupText: {fileID: 1625476247}
   displayDuration: 5
-  message: "tryk p\xE5 piltasterne for at v\xE6lge den perfekte vinkel for at skyde
-    l\xE6ngst, s\xE5 du kan ramme i bogreolen."
+  message: Brug piltasterne til at justere vinklen perfekt for at skyde langt og
+    ramme bogreolen.
 --- !u!114 &1625476247
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3524,8 +3524,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popupText: {fileID: 1932382443}
   displayDuration: 5
-  message: "tryk p\xE5 piltasterne for at rykke ved kasserne. pr\xF8v at balencere
-    v\xE6gten s\xE5 pladen stpr lige"
+  message: "Brug piletasterne til at flytte kasserne og balancere v\xE6gten, s\xE5
+    pladen st\xE5r lige."
 --- !u!114 &1932382443
 MonoBehaviour:
   m_ObjectHideFlags: 0

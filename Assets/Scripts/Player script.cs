@@ -9,9 +9,10 @@ public class Playerscript : MonoBehaviour
     public float playerSprint = 3f;
 
     [Header("Player Health Things")]
-    private float playerHealth = 120f;
+    public float playerHealth = 120f;
     public float presentHealth;
     public GameObject playerDamage;
+    
 
     [Header("Player UI Elements")]
     public TextMeshProUGUI healthText; // Reference to the TMP text object
@@ -38,6 +39,7 @@ public class Playerscript : MonoBehaviour
     {
         presentHealth = playerHealth;
         UpdateHealthText(); // Initialize the health text
+        
     }
 
     private void Update()
@@ -57,6 +59,7 @@ public class Playerscript : MonoBehaviour
         Jump();
 
         Sprint();
+
     }
 
     void playerMove()
@@ -169,4 +172,6 @@ public class Playerscript : MonoBehaviour
             healthText.text = "Health: " + presentHealth;
         }
     }
+  
+   
 }
