@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;  // Needed for Scene Management
 using TMPro;  // Ensure TMPro is included if you're using Text Mesh Pro for popups
@@ -10,8 +9,9 @@ public class RotateAndDisplayAngle : MonoBehaviour
     public TMPro.TMP_Text angleText; // Reference to the 3D text component
     public float forceMagnitude = 1000f; // Strength of firing force
     public GameObject popup; // Reference to the popup message object
+    public string sceneToLoad; // Navnet på scenen, der skal indlæses
 
-    private float rotationAngle = 45f; // Starting angle for the projectile
+    private float rotationAngle = 0f; // Starting angle for the projectile
     private Rigidbody ballRigidbody; // Rigidbody component for the ball
     private bool canShoot = true; // Control flag for firing
     private float launchTime; // Time at which the ball was fired
@@ -51,9 +51,13 @@ public class RotateAndDisplayAngle : MonoBehaviour
             }
             else if (ball.position.z >= 4.215)
             {
-                popup.SetActive(true);
-                popup.GetComponent<TMP_Text>().text = "Du har mestret den perfekte vinkel. Sejren er din.";
-                isBallLaunched = false; // Stop checking after displaying the popup
+                if (!popup.activeInHierarchy)
+                {
+                    popup.SetActive(true);
+                    popup.GetComponent<TMP_Text>().text = "Du har mestret den perfekte vinkel. Sejren er din.";
+                    StartCoroutine(WaitAndLoadScene(4.0f));  // Start coroutine to wait and load scene
+                    isBallLaunched = false; // Stop checking after displaying the popup
+                }
             }
         }
     }
@@ -65,5 +69,11 @@ public class RotateAndDisplayAngle : MonoBehaviour
         canShoot = false;
         launchTime = Time.time;
         isBallLaunched = true;
+    }
+
+    IEnumerator WaitAndLoadScene(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        SceneManager.LoadScene(sceneToLoad);
     }
 }

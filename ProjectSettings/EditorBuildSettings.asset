@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/udefra.unity
+    guid: fc01a4575cf311545bebf6a8b195d28a
+  - enabled: 1
+    path: Assets/Scenes/indefra.unity
+    guid: 38ce2f43aed2e4aa8ba25b8dc374c544
+  - enabled: 1
+    path: "Assets/Scenes/v\xE6gtstang.unity"
+    guid: cfa491202f36396429d83ae992fc951f
+  - enabled: 1
+    path: "Assets/Scenes/indefraEfterV\xE6gt.unity"
+    guid: b2c4bf2a4acb1f6438f5ff4cc643089c
+  - enabled: 1
+    path: Assets/Scenes/skraa.unity
+    guid: 41ce2ff9fdd98714f8279890a0a10d4d
+  - enabled: 1
+    path: Assets/Scenes/indefraEfterSkraa.unity
+    guid: a29c179afe3d59244851c8283f8e6170
   m_configObjects: {}
