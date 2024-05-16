@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro; // Import the TextMeshPro namespace
 
 public class Playerscript : MonoBehaviour
 {
@@ -13,6 +13,9 @@ public class Playerscript : MonoBehaviour
     public float presentHealth;
     public GameObject playerDamage;
 
+    [Header("Player UI Elements")]
+    public TextMeshProUGUI healthText; // Reference to the TMP text object
+
     [Header("Player script cameras")]
     public Transform playerCamera;
 
@@ -20,7 +23,6 @@ public class Playerscript : MonoBehaviour
     public CharacterController cC;
     public float gravity = -9.81f;
     public Animator animator;
-    
 
     [Header("Player jumping and velocity")]
     public float turnCalmTime = 0.1f;
@@ -35,13 +37,14 @@ public class Playerscript : MonoBehaviour
     private void Start()
     {
         presentHealth = playerHealth;
+        UpdateHealthText(); // Initialize the health text
     }
 
     private void Update()
     {
         onSurface = Physics.CheckSphere(surfaceCheck.position, surfaceDistance, surfaceMask);
 
-        if(onSurface && velocity.y < 0)
+        if (onSurface && velocity.y < 0)
         {
             velocity.y = -2f;
         }
@@ -63,7 +66,7 @@ public class Playerscript : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontal_axis, 0f, vertical_axis).normalized;
 
-        if(direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f)
         {
             animator.SetBool("Idle", false);
             animator.SetBool("Walk", true);
@@ -72,8 +75,8 @@ public class Playerscript : MonoBehaviour
             animator.SetBool("Idleaim", false);
 
             //rotation resten er movement
-            float targetAngle = Mathf.Atan2(direction.x, direction.z)* Mathf.Rad2Deg + playerCamera.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCalmVelocity, turnCalmTime); 
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCalmVelocity, turnCalmTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
@@ -87,6 +90,7 @@ public class Playerscript : MonoBehaviour
             animator.SetBool("Running", false);
         }
     }
+
     void Jump()
     {
         if (Input.GetButtonDown("Jump") && onSurface)
@@ -114,7 +118,6 @@ public class Playerscript : MonoBehaviour
 
             if (direction.magnitude >= 0.1f)
             {
-
                 animator.SetBool("Walk", false);
                 animator.SetBool("Running", true);
 
@@ -134,9 +137,11 @@ public class Playerscript : MonoBehaviour
             }
         }
     }
+
     public void playerHitDamage(float takeDamage)
     {
         presentHealth -= takeDamage;
+        UpdateHealthText(); // Update the health text
         StartCoroutine(PlayerDamage());
 
         if (presentHealth <= 0)
@@ -144,11 +149,10 @@ public class Playerscript : MonoBehaviour
             PlayerDie();
         }
     }
+
     private void PlayerDie()
     {
-
         Object.Destroy(gameObject, 1.0f);
-
     }
 
     IEnumerator PlayerDamage()
@@ -156,5 +160,13 @@ public class Playerscript : MonoBehaviour
         playerDamage.SetActive(true);
         yield return new WaitForSeconds(2.5f);
         playerDamage.SetActive(false);
+    }
+
+    void UpdateHealthText()
+    {
+        if (healthText != null)
+        {
+            healthText.text = "Health: " + presentHealth;
+        }
     }
 }
